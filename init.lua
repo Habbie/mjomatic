@@ -110,8 +110,8 @@ function ext.mjomatic.go(cfg)
         if not windows[key] then
             error(string.format('no window found for application %s (%s)', title, key))
         end
-        app = ext.appfinder.app_from_name(title)
-        window = app:mainwindow()
+        local app = ext.appfinder.app_from_name(title)
+        local window = app:mainwindow()
         -- hydra.alert(string.format('application title for %q is %q, main window %q', title, app:title(), window:title()))
         if window then
             resizetogrid(window, windows[key])
