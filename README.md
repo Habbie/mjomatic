@@ -43,7 +43,7 @@ ext.mjomatic.go({
 * port to Mjolnir when Mjolnir is done
 * add screenshot
 * modularize code
-* then, add unit tests
+* now that we have busted for testing, I noticed we sometimes send floats to setframe, with risk of off-by-one (pixel) errors. Move to integers in a consistent grid.
 * support whitespace at the end of a windowgram line (right now we require all lines to be the same length, instead we should take the length of the longest line as our grid width)
 * support more than one window per application, with some smart window selection
 * support more than one screen, plus spaces(?)
