@@ -1,0 +1,7 @@
+language: objective-c
+before_script:
+ - brew install lua52
+ - brew install luarocks --with-lua52
+ - luarocks install busted
+script:
+ - busted
