@@ -80,7 +80,7 @@ function ext.mjomatic.go(cfg)
     for row, v in ipairs(grid) do
         if gridw then
             if gridw ~= v:len() then
-                error('inconsistent grid with')
+                error('inconsistent grid width')
             end
         else
             gridw=v:len()
