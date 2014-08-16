@@ -113,6 +113,10 @@ function ext.mjomatic.go(cfg)
         app = ext.appfinder.app_from_name(title)
         window = app:mainwindow()
         -- hydra.alert(string.format('application title for %q is %q, main window %q', title, app:title(), window:title()))
-        resizetogrid(window, windows[key])
+        if window then
+            resizetogrid(window, windows[key])
+        else
+            hydra.alert(string.format('application %s has no main window', app:title()))
+        end
     end
 end
