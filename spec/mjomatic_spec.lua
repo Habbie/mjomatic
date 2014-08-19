@@ -1,10 +1,15 @@
 describe("mjomatic", function()
+    local results
+    local window, application, appfinder, screen, hydra, ext
+    local env
+    local mjomatic
 
     setup(function()
         results = {}
+        env = {}
 
         -- window class
-        window = {}
+        local window = {}
         window.__index = window
         function window.new(name)
             local self = setmetatable({}, window)
@@ -15,6 +20,8 @@ describe("mjomatic", function()
         function window:setframe(frame)
             results[self.name] = frame
         end
+
+        env.window = window
 
         -- application class
         application = {}
@@ -29,11 +36,15 @@ describe("mjomatic", function()
             return window.new(self.name)
         end
 
+        env.application = env
+
         -- appfinder module
         appfinder = {}
         function appfinder.app_from_name(name)
             return application.new(name)
         end
+
+        env.appfinder = appfinder
         
         -- screen class
         screen = {}
@@ -58,36 +69,32 @@ describe("mjomatic", function()
             return self.framew
         end
 
+        env.screen = screen
+
         -- hydra module
         hydra = {}
+
+        env.hydra = hydra
 
         ext = {}
         ext.appfinder = appfinder
         ext.appfinder.init = {}
 
+        env.ext = ext
+
         package.loaded['ext.appfinder.init'] = ext.appfinder.init
     end)
 
     teardown(function()
-        window = nil
-        application = nil
-        appfinder = nil
-        screen = nil
-        hydra = nil
-
-        ext = nil
-
         package.loaded['ext.appfinder.init']=nil
     end)
 
-    it("can require mjomatic, and mjomatic alerts on load", function()
+    it("does the right things", function()
         stub(hydra, 'alert')
-        require 'init'
+        mjomatic = require('spec/mjomatic_wrapper')(env)
         assert.stub(hydra.alert).was.called(1)
-    end)
 
-    it("can GO", function()
-        ext.mjomatic.go({
+        mjomatic.go({
             "CCCCCCCCCCCCCiiiiiiiiiii      # <-- The windowgram, it defines the shapes and positions of windows",
             "CCCCCCCCCCCCCiiiiiiiiiii",
             "SSSSSSSSSSSSSiiiiiiiiiii",
@@ -100,20 +107,9 @@ describe("mjomatic", function()
             "i iTerm",
             "Y YoruFukurou",
             "S Sublime Text 2"})
-    end)
-
-    it("puts iTerm in the right place", function()
-        assert.are.same(results['iTerm'], { x=1040, w=880, h=706.8, y=22 })
-    end)
-    it("puts Google Chrome in the right place", function()
-        assert.are.same(results['Google Chrome'], { x=0, w=1040, h=471.2, y=22 })
-    end)
-
-    it("puts Sublime Text 2 in the right place", function()
-        assert.are.same(results['Sublime Text 2'], { x=0, w=1040, h=706.8, y=493.2 })
-    end)
-
-    it("puts YoruFukurou in the right place", function()
-        assert.are.same(results['YoruFukurou'], { x=1040, w=880, h=471.2, y=728.8 })
+        assert.are.same(results, {['iTerm']={ x=1040, w=880, h=706.8, y=22 },
+                                  ['Google Chrome'] = { x=0, w=1040, h=471.2, y=22 },
+                                  ['Sublime Text 2'] = { x=0, w=1040, h=706.8, y=493.2 },
+                                  ['YoruFukurou'] = { x=1040, w=880, h=471.2, y=728.8 } }) 
     end)
 end)

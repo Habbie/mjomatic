@@ -1,6 +1,4 @@
-require "ext.appfinder.init"
-
-ext.mjomatic = {}
+local mjomatic = {}
 
 hydra.alert('mjomatic loaded')
 
@@ -33,7 +31,7 @@ local function resizetogrid(window, coords)
     -- hydra.alert(string.format('new frame for %q is %d*%d at %d,%d', window:title(), newframe.w, newframe.h, newframe.x, newframe.y), 20)
 end
 
-function ext.mjomatic.go(cfg)
+function mjomatic.go(cfg)
     -- hydra.alert('mjomatic is go')
     local grid = {}
     local map = {}
@@ -120,3 +118,5 @@ function ext.mjomatic.go(cfg)
         end
     end
 end
+
+return mjomatic
