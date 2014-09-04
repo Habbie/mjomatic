@@ -2,7 +2,7 @@
 
 OS X window management inspired by [tmuxomatic](https://github.com/oxidane/tmuxomatic).
 
-Beta. Requires [Mjolnir][http://mjolnir.io/]
+Beta. Requires [Mjolnir](http://mjolnir.io/)
 [appfinder](https://github.com/cmsj/mjolnir.cmsj.appfinder) (automatic dependency via luarocks).
 
 ### Install
