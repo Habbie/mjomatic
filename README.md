@@ -2,26 +2,25 @@
 
 OS X window management inspired by [tmuxomatic](https://github.com/oxidane/tmuxomatic).
 
-Work in progress. Requires Hydra (no link) and 
-[appfinder](https://github.com/cmsj/hydra-appfinder), will be ported to 
-[Mjolnir](https://github.com/mjolnir-io/mjolnir) when Mjolnir is done.
+Beta. Requires [Mjolnir][http://mjolnir.io/]
+[appfinder](https://github.com/cmsj/mjolnir.cmsj.appfinder) (automatic dependency via luarocks).
 
 ### Install
 
 ~~~bash
-$ git clone https://github.com/Habbie/mjomatic.git ~/.hydra/ext/mjomatic
+$ luarocks install mjolnir.7bits.mjomatic
 ~~~
 
 ### Require
 
 ~~~lua
-require "ext.mjomatic.init"
+local mjomatic = require "mjolnir.7bits.mjomatic"
 ~~~
 
 ### Usage
 
 ~~~lua
-ext.mjomatic.go({
+mjomatic.go({
 "CCCCCCCCCCCCCiiiiiiiiiii      # <-- The windowgram, it defines the shapes and positions of windows",
 "CCCCCCCCCCCCCiiiiiiiiiii",
 "SSSSSSSSSSSSSiiiiiiiiiii",
@@ -40,8 +39,6 @@ ext.mjomatic.go({
 
 ### TODO
 
-* port to Mjolnir when Mjolnir is done
-* add screenshot
 * modularize code
 * now that we have busted for testing, I noticed we sometimes send floats to setframe, with risk of off-by-one (pixel) errors. Move to integers in a consistent grid.
 * support whitespace at the end of a windowgram line (right now we require all lines to be the same length, instead we should take the length of the longest line as our grid width)

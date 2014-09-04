@@ -1,38 +1,42 @@
 local mjomatic = {}
 
-hydra.alert('mjomatic loaded')
+local alert = require 'mjolnir.alert'
+local appfinder = require 'mjolnir.cmsj.appfinder'
+local screen = require 'mjolnir.screen'
+
+alert.show('mjomatic loaded')
 
 local gridh
 local gridw
 
 local function resizetogrid(window, coords)
-    -- hydra.alert(string.format('move window %q to %d,%d-%d,%d', window:title(), coords.r1, coords.c1, coords.r2, coords.c2), 20)
+    -- alert.show(string.format('move window %q to %d,%d-%d,%d', window:title(), coords.r1, coords.c1, coords.r2, coords.c2), 20)
 
     -- collect screen dimensions
-    local frame = screen.mainscreen():frame()
-    local framew = screen.mainscreen():frame_without_dock_or_menu()
+    local frame = screen.mainscreen():fullframe()
+    local framew = screen.mainscreen():frame()
 
     local h = framew.h
     local w = frame.w
     local x = framew.x
     local y = framew.y
-    -- hydra.alert(string.format('screen dimensions %d,%d at %d,%d', h, w, x, y))
+    -- alert.show(string.format('screen dimensions %d,%d at %d,%d', h, w, x, y))
     local hdelta = h / gridh
     local wdelta = w / gridw
 
-    -- hydra.alert('hdelta='..hdelta, 5)
-    -- hydra.alert('wdelta='..wdelta, 5)
+    -- alert.show('hdelta='..hdelta, 5)
+    -- alert.show('wdelta='..wdelta, 5)
     local newframe = {}
     newframe.x = (coords.c1-1) * wdelta + x
     newframe.y = (coords.r1-1) * hdelta + y
     newframe.h = (coords.r2-coords.r1+1) * hdelta
     newframe.w = (coords.c2-coords.c1+1) * wdelta
     window:setframe(newframe)
-    -- hydra.alert(string.format('new frame for %q is %d*%d at %d,%d', window:title(), newframe.w, newframe.h, newframe.x, newframe.y), 20)
+    -- alert.show(string.format('new frame for %q is %d*%d at %d,%d', window:title(), newframe.w, newframe.h, newframe.x, newframe.y), 20)
 end
 
 function mjomatic.go(cfg)
-    -- hydra.alert('mjomatic is go')
+    -- alert.show('mjomatic is go')
     local grid = {}
     local map = {}
 
@@ -45,7 +49,7 @@ function mjomatic.go(cfg)
     for i,l in ipairs(cfg) do
         l = l:gsub('#.*','')        -- strip comments
         l = l:gsub('%s*$','')       -- strip trailing whitespace
-        -- hydra.alert(l)
+        -- alert.show(l)
         if l:len() == 0 then
             if #grid > 0 then
                 if target == grid then
@@ -59,8 +63,8 @@ function mjomatic.go(cfg)
         end
     end
 
-    -- hydra.alert('grid size '..#grid)
-    -- hydra.alert('map size '..#map)
+    -- alert.show('grid size '..#grid)
+    -- alert.show('map size '..#map)
 
     gridh = #grid
     gridw = nil
@@ -71,7 +75,7 @@ function mjomatic.go(cfg)
     for i, v in ipairs(map) do
         local key = v:sub(1,1)
         local title = v:sub(3)
-        -- hydra.alert(string.format('%s=%s', key, title))
+        -- alert.show(string.format('%s=%s', key, title))
         titlemap[title] = key
     end
 
@@ -97,24 +101,24 @@ function mjomatic.go(cfg)
         end
     end
 
-    -- hydra.alert('grid h='..gridh..' w='..gridw)
-    -- hydra.alert('windows:')
+    -- alert.show('grid h='..gridh..' w='..gridw)
+    -- alert.show('windows:')
     for char, window in pairs(windows) do
-        -- hydra.alert(string.format('window %s: top left %d,%d bottom right %d,%d', char, window.r1, window.c1, window.r2, window.c2))
+        -- alert.show(string.format('window %s: top left %d,%d bottom right %d,%d', char, window.r1, window.c1, window.r2, window.c2))
     end
-     
+
     for title, key in pairs(titlemap) do
-        -- hydra.alert(string.format("title %s key %s", title, key))
+        -- alert.show(string.format("title %s key %s", title, key))
         if not windows[key] then
             error(string.format('no window found for application %s (%s)', title, key))
         end
-        local app = ext.appfinder.app_from_name(title)
+        local app = appfinder.app_from_name(title)
         local window = app:mainwindow()
-        -- hydra.alert(string.format('application title for %q is %q, main window %q', title, app:title(), window:title()))
+        -- alert.show(string.format('application title for %q is %q, main window %q', title, app:title(), window:title()))
         if window then
             resizetogrid(window, windows[key])
         else
-            hydra.alert(string.format('application %s has no main window', app:title()))
+            alert.show(string.format('application %s has no main window', app:title()))
         end
     end
 end

@@ -1,12 +1,10 @@
 describe("mjomatic", function()
     local results
-    local window, application, appfinder, screen, hydra, ext
     local env
     local mjomatic
 
     setup(function()
         results = {}
-        env = {}
 
         -- window class
         local window = {}
@@ -21,10 +19,10 @@ describe("mjomatic", function()
             results[self.name] = frame
         end
 
-        env.window = window
+        package.loaded['mjolnir.window'] = window
 
         -- application class
-        application = {}
+        local application = {}
         application.__index = application
         function application.new(name)
             local self = setmetatable({}, application)
@@ -36,18 +34,18 @@ describe("mjomatic", function()
             return window.new(self.name)
         end
 
-        env.application = env
+        package.loaded['mjolnir.application'] = application
 
         -- appfinder module
-        appfinder = {}
+        local appfinder = {}
         function appfinder.app_from_name(name)
             return application.new(name)
         end
 
-        env.appfinder = appfinder
+        package.loaded['mjolnir.cmsj.appfinder'] = appfinder
         
         -- screen class
-        screen = {}
+        local screen = {}
         screen.__index = screen
         function screen.new(name, frame, framew)
             local self = setmetatable({}, screen)
@@ -61,38 +59,35 @@ describe("mjomatic", function()
             return screen.new('mainscreen', {h=1200, w=1920, x=0, y=0}, {h=1178, w=1916, x=0, y=22})
         end
 
-        function screen:frame()
+        function screen:fullframe()
             return self.framefull
         end
 
-        function screen:frame_without_dock_or_menu()
+        function screen:frame()
             return self.framew
         end
 
-        env.screen = screen
+        package.loaded['mjolnir.screen'] = screen
 
-        -- hydra module
-        hydra = {}
 
-        env.hydra = hydra
+        -- alert class
+        local alert = {}
 
-        ext = {}
-        ext.appfinder = appfinder
-        ext.appfinder.init = {}
-
-        env.ext = ext
-
-        package.loaded['ext.appfinder.init'] = ext.appfinder.init
+        package.loaded['mjolnir.alert'] = alert
     end)
 
     teardown(function()
-        package.loaded['ext.appfinder.init']=nil
+        package.loaded['mjolnir.window'] = nil
+        package.loaded['mjolnir.application'] = nil
+        package.loaded['mjolnir.cmsj.appfinder'] = nil
+        package.loaded['mjolnir.screen'] = nil
+        package.loaded['mjolnir.alert'] = nil
     end)
 
     it("does the right things", function()
-        stub(hydra, 'alert')
-        mjomatic = require('spec/mjomatic_wrapper')(env)
-        assert.stub(hydra.alert).was.called(1)
+        stub(package.loaded['mjolnir.alert'], 'show')
+        mjomatic = require('mjomatic')
+        assert.stub(package.loaded['mjolnir.alert'].show).was.called(1)
 
         mjomatic.go({
             "CCCCCCCCCCCCCiiiiiiiiiii      # <-- The windowgram, it defines the shapes and positions of windows",
