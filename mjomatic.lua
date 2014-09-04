@@ -1,3 +1,12 @@
+--- === mjolnir.7bits.mjomatic ===
+---
+--- tmuxomatic-like window management
+---
+--- Usage:
+--- ~~~lua
+--- local mjomatic = require "mjolnir.7bits.mjomatic"
+--- ~~~
+
 local mjomatic = {}
 
 local alert = require 'mjolnir.alert'
@@ -34,6 +43,25 @@ local function resizetogrid(window, coords)
     window:setframe(newframe)
     -- alert.show(string.format('new frame for %q is %d*%d at %d,%d', window:title(), newframe.w, newframe.h, newframe.x, newframe.y), 20)
 end
+
+--- mjolnir.7bits.mjomatic.go(cfg)
+--- Function
+--- takes a config as a list of strings, configures your windows as stated.
+---
+--- Example:
+--- ~~~lua
+--- mjomatic.go({
+--- "CCCCCCCCCCCCCiiiiiiiiiii      # <-- The windowgram, it defines the shapes and positions of windows",
+--- "CCCCCCCCCCCCCiiiiiiiiiii",
+--- "SSSSSSSSSSSSSiiiiiiiiiii",
+--- "SSSSSSSSSSSSSYYYYYYYYYYY",
+--- "SSSSSSSSSSSSSYYYYYYYYYYY",
+--- "",
+--- "C Google Chrome            # <-- window C has application():title() 'Google Chrome'",
+--- "i iTerm",
+--- "Y YoruFukurou",
+--- "S Sublime Text 2"})
+--- ~~~
 
 function mjomatic.go(cfg)
     -- alert.show('mjomatic is go')
