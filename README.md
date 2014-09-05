@@ -45,7 +45,7 @@ mjomatic.go({
 * support more than one window per application, with some smart window selection
 * support more than one screen, plus spaces(?)
 * read from configfile instead of awkward table-of-lines in init.lua (or are bracket strings good enough?)
-* Terminal/iTerm snap their size to fit an integer number of rows/columns of text. Compensate for that. [related Mjolnir feature request](https://github.com/mjolnir-io/core.window/issues/10)
+* Terminal/iTerm snap their size to fit an integer number of rows/columns of text. Compensate for that. [related Mjolnir feature request](https://github.com/mjolnir-io/mjolnir-modules/issues/9)
 
 ### Ideas
 Support overlapping windows? Right now this already works (I think):
