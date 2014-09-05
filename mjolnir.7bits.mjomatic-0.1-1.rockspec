@@ -12,7 +12,7 @@ version = "0.1-1"
 
 -- General metadata:
 
-local url = "github.com/Habbie/mjolnir.7bits.mjomatic"
+local url = "github.com/Habbie/mjomatic"
 local desc = "OS X window management with Mjolnir, inspired by tmuxomatic."
 
 source = {url = "git://" .. url}
