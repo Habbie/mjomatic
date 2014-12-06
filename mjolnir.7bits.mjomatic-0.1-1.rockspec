@@ -37,7 +37,7 @@ dependencies = {
   -- "mjolnir.fnutils",
   "mjolnir.screen",
   "mjolnir.alert",
-  "mjolnir.cmsj.appfinder"
+  "mjolnir.grille"
 }
 
 -- Build rules:
