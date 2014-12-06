@@ -35,8 +35,8 @@ dependencies = {
   -- uncomment the following line:
   --
   -- "mjolnir.fnutils",
-  "mjolnir.screen",
-  "mjolnir.alert",
+  --"mjolnir.screen",
+  --"mjolnir.alert",
   "mjolnir.cmsj.appfinder"
 }
 
