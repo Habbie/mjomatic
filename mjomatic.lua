@@ -10,37 +10,24 @@
 local mjomatic = {}
 
 local alert = require 'mjolnir.alert'
-local appfinder = require 'mjolnir.cmsj.appfinder'
-local screen = require 'mjolnir.screen'
+local grille = require 'mjolnir.grille'
 
 alert.show('mjomatic loaded')
 
 local gridh
 local gridw
 
-local function resizetogrid(window, coords)
-    -- alert.show(string.format('move window %q to %d,%d-%d,%d', window:title(), coords.r1, coords.c1, coords.r2, coords.c2), 20)
+local function resizetogrid(title, coords)
+    -- print(string.format('move window %q to %d,%d-%d,%d', title, coords.r1, coords.c1, coords.r2, coords.c2), 20)
 
-    -- collect screen dimensions
-    local frame = screen.mainscreen():fullframe()
-    local framew = screen.mainscreen():frame()
+    local grid = grille.new(gridw, gridh)
 
-    local h = framew.h
-    local w = frame.w
-    local x = framew.x
-    local y = framew.y
-    -- alert.show(string.format('screen dimensions %d,%d at %d,%d', h, w, x, y))
-    local hdelta = h / gridh
-    local wdelta = w / gridw
-
-    -- alert.show('hdelta='..hdelta, 5)
-    -- alert.show('wdelta='..wdelta, 5)
-    local newframe = {}
-    newframe.x = (coords.c1-1) * wdelta + x
-    newframe.y = (coords.r1-1) * hdelta + y
-    newframe.h = (coords.r2-coords.r1+1) * hdelta
-    newframe.w = (coords.c2-coords.c1+1) * wdelta
-    window:setframe(newframe)
+    grid:window(title):
+         xpos(coords.c1-1):
+         ypos(coords.r1-1):
+         wide(coords.c2-coords.c1+1):
+         tall(coords.r2-coords.r1+1):
+         act()()
     -- alert.show(string.format('new frame for %q is %d*%d at %d,%d', window:title(), newframe.w, newframe.h, newframe.x, newframe.y), 20)
 end
 
@@ -140,14 +127,7 @@ function mjomatic.go(cfg)
         if not windows[key] then
             error(string.format('no window found for application %s (%s)', title, key))
         end
-        local app = appfinder.app_from_name(title)
-        local window = app:mainwindow()
-        -- alert.show(string.format('application title for %q is %q, main window %q', title, app:title(), window:title()))
-        if window then
-            resizetogrid(window, windows[key])
-        else
-            alert.show(string.format('application %s has no main window', app:title()))
-        end
+        resizetogrid(title, windows[key])
     end
 end
 
